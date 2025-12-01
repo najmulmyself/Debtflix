@@ -7,7 +7,7 @@ class DarkTheme {
   static ThemeData get theme => ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
-        primarySwatch: MaterialColor(AppColors.primaryDark),
+        primarySwatch: Colors.blue,
         colorScheme: const ColorScheme.dark(
           primary: AppColors.primary,
           secondary: AppColors.secondary,
@@ -25,28 +25,30 @@ class DarkTheme {
           titleTextStyle: AppTextStyles.headline2,
           centerTitle: true,
         ),
-        cardTheme: CardTheme(
-          color: const Color(0xFF1E1E1E),
+        cardTheme: const CardThemeData(
+          color: Color(0xFF1E1E1E),
           elevation: 2,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
-          backgroundColor: AppColors.primaryDark,
-          foregroundColor: AppColors.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryDark,
+            foregroundColor: AppColors.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
         ),
         textButtonTheme: TextButtonThemeData(
-          foregroundColor: AppColors.primary,
+          style: TextButton.styleFrom(foregroundColor: AppColors.primary),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           filled: true,
           border: OutlineInputBorder(
             borderSide: const BorderSide(color: AppColors.border),
-            borderRadius: BorderRadius.all(8),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),

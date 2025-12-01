@@ -1,29 +1,22 @@
 import 'package:dio/dio.dart';
 
 import '../../../app/constants/api_constants.dart';
-import '../../../core/storage/secure_storage.dart';
 
 class AuthInterceptor extends Interceptor {
-  final SecureStorage _secureStorage;
-
-  AuthInterceptor(this._secureStorage);
+  AuthInterceptor();
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final token = await _secureStorage.getToken();
-
-    if (token != null) {
-      options.headers[ApiConstants.authorizationHeader] = 'Bearer $token';
-    }
-
+    // For now, skip token injection
+    // TODO: Implement proper token injection when secure storage is available
     handler.next(options);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == ApiConstants.unauthorizedCode) {
-      // Token expired or invalid, clear storage
-      _secureStorage.clearAll();
+      // Token expired or invalid
+      // TODO: Implement proper token clearing when secure storage is available
     }
 
     handler.next(err);

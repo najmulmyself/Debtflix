@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/authentication/presentation/pages/auth_page.dart';
-import '../features/authentication/presentation/pages/login_page.dart';
-import '../features/authentication/presentation/pages/register_page.dart';
-import '../features/transactions/presentation/pages/transaction_list_page.dart';
-import '../features/dashboard/presentation/pages/dashboard_page.dart';
-import '../features/settings/presentation/pages/settings_page.dart';
+import 'package:money_manager/features/authentication/presentation/pages/auth_page.dart';
+import 'package:money_manager/features/auth/presentation/pages/login_page.dart';
+import 'package:money_manager/features/auth/presentation/pages/register_page.dart';
+import 'package:money_manager/features/transactions/presentation/pages/transaction_list_page.dart';
+import 'package:money_manager/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:money_manager/features/settings/presentation/pages/settings_page.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -80,7 +80,7 @@ class AppRouter {
               'The page you\'re looking for doesn\'t exist.',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey[600],
+                color: const Color(0xFF757575),
               ),
             ),
             const SizedBox(height: 24),

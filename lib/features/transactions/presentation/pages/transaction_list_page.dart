@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../domain/entities/transaction.dart';
 import '../bloc/simple_transaction_bloc.dart';
 import '../widgets/transaction_card.dart';
 import '../widgets/add_transaction_fab.dart';
@@ -69,12 +70,7 @@ class TransactionListPage extends StatelessWidget {
           }
 
           if (state.failure != null) {
-            return ErrorWidget(
-              message: state.failure!.toString(),
-              onRetry: () {
-                context.read<TransactionBloc>().add(const LoadTransactions());
-              },
-            );
+            return const Center(child: Text('Error loading transactions'));
           }
 
           if (state.transactions.isEmpty) {
@@ -111,7 +107,7 @@ class TransactionListPage extends StatelessWidget {
 
           return RefreshIndicator(
             onRefresh: () async {
-              context.read<TransactionBloc>().add(const LoadTransactions());
+              context.read<TransactionBloc>().add(LoadTransactions());
             },
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
@@ -139,7 +135,7 @@ class TransactionListPage extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmation(BuildContext context, dynamic transaction) {
+  void _showDeleteConfirmation(BuildContext context, Transaction transaction) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

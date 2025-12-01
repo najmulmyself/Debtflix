@@ -16,8 +16,7 @@ class AppTheme {
     Brightness statusBarIconBrightness = Brightness.dark,
   }) async {
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    await SystemChrome.setSystemNavigationBarColor(statusBarColor);
-    await SystemChrome.setSystemNavigationBarIcon(statusBarIconBrightness);
+    // SystemChrome.setSystemNavigationBarColor is deprecated in newer Flutter versions
   }
 
   static void setOrientation(List<DeviceOrientation> orientations) {

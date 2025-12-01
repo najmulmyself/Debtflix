@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/entities/transaction.dart';
+
 class TransactionCard extends StatelessWidget {
-  final dynamic transaction;
+  final Transaction transaction;
   final VoidCallback? onTap;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
@@ -17,7 +19,7 @@ class TransactionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isIncome = transaction.type == 'income';
-    final amount = transaction.amount as double;
+    final amount = transaction.amount;
 
     return Card(
       elevation: 2,

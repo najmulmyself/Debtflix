@@ -1,76 +1,72 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../domain/entities/user.dart';
-import '../../../domain/usecases/login_usecase.dart';
-import '../../../domain/usecases/logout_usecase.dart';
+abstract class AuthEvent {}
 
-part 'auth_bloc.freezed.dart';
+class AuthLoginEvent extends AuthEvent {
+  final String email;
+  final String password;
+  final String? name;
 
-@freezed
-class AuthEvent with _$AuthEvent {
-  const factory AuthEvent.login({
-    required String email,
-    required String password,
-    String? name,
-  }) = _Login;
-
-  const factory AuthEvent.logout() = _Logout;
+  AuthLoginEvent({
+    required this.email,
+    required this.password,
+    this.name,
+  });
 }
 
-@freezed
-class AuthState with _$AuthState {
-  const factory AuthState.initial() = _Initial;
+class AuthLogoutEvent extends AuthEvent {}
 
-  const factory AuthState.loading() = _Loading;
+abstract class AuthState {
+  const AuthState();
+}
 
-  const factory AuthState.authenticated(User user) = _Authenticated;
+class AuthInitialState extends AuthState {
+  const AuthInitialState();
+}
 
-  const factory AuthState.unauthenticated() = _Unauthenticated;
+class AuthLoadingState extends AuthState {
+  const AuthLoadingState();
+}
 
-  const factory AuthState.error({
-    required String failure,
-  }) = _Error;
+class AuthenticatedState extends AuthState {
+  final String user;
+
+  const AuthenticatedState(this.user);
+}
+
+class UnauthenticatedState extends AuthState {
+  const UnauthenticatedState();
+}
+
+class AuthErrorState extends AuthState {
+  final String error;
+
+  const AuthErrorState(this.error);
 }
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final LoginUseCase _loginUseCase;
-  final LogoutUseCase _logoutUseCase;
+  AuthBloc() : super(const AuthInitialState()) {
+    on<AuthLoginEvent>(_onLogin);
+    on<AuthLogoutEvent>(_onLogout);
+  }
 
-  AuthBloc({
-    required this._loginUseCase,
-    required this._logoutUseCase,
-  }) : super(const AuthState.initial()) {
-    on<AuthEvent>((event, emit) async {
-      switch (event) {
-        case AuthEvent.login(email: _, password: _, name: _):
-          emit(const AuthState.loading());
-          try {
-            final result = await _loginUseCase(
-              email: event.email,
-              password: event.password,
-            );
-            result.fold(
-              (user) => emit(AuthState.authenticated(user)),
-              (failure) => emit(AuthState.error(failure: failure)),
-            );
-          } catch (e) {
-            emit(AuthState.error(failure: e.toString()));
-          }
-          break;
+  Future<void> _onLogin(AuthLoginEvent event, Emitter<AuthState> emit) async {
+    emit(const AuthLoadingState());
+    // Simulate network delay
+    await Future.delayed(const Duration(seconds: 1));
 
-        case AuthEvent.logout():
-          try {
-            final result = await _logoutUseCase();
-            result.fold(
-              (_) => emit(const AuthState.unauthenticated()),
-              (failure) => emit(AuthState.error(failure: failure)),
-            );
-          } catch (e) {
-            emit(AuthState.error(failure: e.toString()));
-          }
-          break;
-      }
-    });
+    // Simple validation for demo
+    if (event.email.contains('@') && event.password.length >= 6) {
+      emit(AuthenticatedState(event.email));
+    } else {
+      emit(const AuthErrorState('Invalid email or password'));
+    }
+  }
+
+  Future<void> _onLogout(AuthLogoutEvent event, Emitter<AuthState> emit) async {
+    emit(const AuthLoadingState());
+    // Simulate logout delay
+    await Future.delayed(const Duration(milliseconds: 500));
+    emit(const UnauthenticatedState());
   }
 }

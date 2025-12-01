@@ -63,6 +63,9 @@ class ApiConstants {
   static const String accountIdParam = 'account_id';
   static const String typeParam = 'type';
 
+  // Timeouts
+  static const Duration apiTimeout = Duration(seconds: 30);
+
   // Response codes
   static const int successCode = 200;
   static const int createdCode = 201;

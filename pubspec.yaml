@@ -20,6 +20,7 @@ dependencies:
   bloc: ^8.1.3
   get_it: ^7.6.4
   injectable: ^2.3.2
+  dartz: ^0.10.1
 
   # Navigation
   go_router: ^13.0.1
@@ -54,6 +55,7 @@ dependencies:
 
   # Financial & Charts
   fl_chart: ^0.65.0
+  font_awesome_flutter: ^10.6.0
 
   # Image & Camera
   image_picker: ^1.0.7

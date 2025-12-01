@@ -1,24 +1,18 @@
 import 'package:get_it/get_it.dart';
-import 'package:injectable/injectable.dart';
-
-import 'injection_modules.dart';
 
 final GetIt getIt = GetIt.instance;
 
-@InjectableInit(
-  initializerName: 'initDependencies',
-  preferRelativeImports: true,
-  asExtension: true,
-)
 Future<void> configureDependencies() async {
-  await getIt.initDependencies();
+  // Basic dependency injection configuration
+  // This will be expanded as more services are implemented
+
+  // For now, just register a basic logger for testing
+  getIt.registerSingleton<LoggerService>(LoggerService());
 }
 
-@InjectableInit(
-  initializerName: 'initTestDependencies',
-  preferRelativeImports: true,
-  asExtension: true,
-)
-Future<void> configureTestDependencies() async {
-  await getIt.initTestDependencies();
+// Simple logger service for testing
+class LoggerService {
+  void log(String message) {
+    print('[Logger] $message');
+  }
 }

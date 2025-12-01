@@ -14,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize dependency injection
-  await initializeDependencies();
+  await configureDependencies();
 
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
@@ -47,15 +47,25 @@ class MyApp extends StatelessWidget {
                 case '/login':
                   return MaterialPageRoute(builder: (_) => const LoginPage());
                 case '/transactions':
-                  return MaterialPageRoute(builder: (_) => const TransactionListPage());
+                  return MaterialPageRoute(
+                    builder: (_) => const TransactionListPage(),
+                  );
                 case '/budgets':
-                  return MaterialPageRoute(builder: (_) => const BudgetOverviewPage());
+                  return MaterialPageRoute(
+                    builder: (_) => const BudgetOverviewPage(),
+                  );
                 case '/analytics':
-                  return MaterialPageRoute(builder: (_) => const AnalyticsPage());
+                  return MaterialPageRoute(
+                    builder: (_) => const AnalyticsPage(),
+                  );
                 case '/goals':
-                  return MaterialPageRoute(builder: (_) => const SavingsGoalsPage());
+                  return MaterialPageRoute(
+                    builder: (_) => const SavingsGoalsPage(),
+                  );
                 default:
-                  return MaterialPageRoute(builder: (_) => const SplashScreen());
+                  return MaterialPageRoute(
+                    builder: (_) => const SplashScreen(),
+                  );
               }
             },
           );
@@ -79,12 +89,12 @@ class _SplashScreenState extends State<SplashScreen> {
     _navigateToHome();
   }
 
-  void _navigateToHome() async {
+  Future<void> _navigateToHome() async {
     // Simulate loading time
     await Future.delayed(const Duration(seconds: 2));
 
     // Check if user is authenticated (this would be implemented with actual auth logic)
-    final isAuthenticated = false; // Replace with actual auth check
+    const isAuthenticated = false; // Replace with actual auth check
 
     if (mounted) {
       if (isAuthenticated) {
@@ -110,9 +120,9 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 24),
             Text(
               'Money Manager',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(

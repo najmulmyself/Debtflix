@@ -1,82 +1,79 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:equatable/equatable.dart';
-
 import 'failure_codes.dart';
 
-part 'failures.freezed.dart';
+class Failure {
+  final String message;
+  final FailureCode code;
 
-@freezed
-class Failure with _$Failure {
-  const Failure._({
+  const Failure({
     required this.message,
     required this.code,
   });
 
   factory Failure.networkError(String message) {
-    return const Failure._(
+    return Failure(
       message: message,
       code: FailureCode.networkError,
     );
   }
 
   factory Failure.serverError(String message) {
-    return const Failure._(
+    return Failure(
       message: message,
       code: FailureCode.serverError,
     );
   }
 
   factory Failure.databaseError(String message) {
-    return const Failure._(
+    return Failure(
       message: message,
       code: FailureCode.databaseError,
     );
   }
 
   factory Failure.validationError(String message) {
-    return const Failure._(
+    return Failure(
       message: message,
       code: FailureCode.validationError,
     );
   }
 
   factory Failure.unauthorized(String message) {
-    return const Failure._(
+    return Failure(
       message: message,
       code: FailureCode.unauthorized,
     );
   }
 
   factory Failure.notAuthenticated(String message) {
-    return const Failure._(
+    return Failure(
       message: message,
       code: FailureCode.notAuthenticated,
     );
   }
 
   factory Failure.tooManyRequests(String message) {
-    return const Failure._(
+    return Failure(
       message: message,
       code: FailureCode.tooManyRequests,
     );
   }
 
   factory Failure.conflict(String message) {
-    return const Failure._(
+    return Failure(
       message: message,
       code: FailureCode.conflict,
     );
   }
 
   factory Failure.cacheError(String message) {
-    return const Failure._(
+    return Failure(
       message: message,
       code: FailureCode.cacheError,
     );
   }
 
   factory Failure.unknown(String message) {
-    return const Failure._(
+    return Failure(
       message: message,
       code: FailureCode.unknown,
     );
@@ -122,57 +119,59 @@ class Failure with _$Failure {
   int get hashCode => message.hashCode ^ code.hashCode;
 }
 
-@freezed
-class AuthFailure with _$AuthFailure {
-  const AuthFailure._({
+class AuthFailure {
+  final String message;
+  final AuthFailureCode code;
+
+  const AuthFailure({
     required this.message,
     required this.code,
   });
 
   factory AuthFailure.unauthorized(String message) {
-    return const AuthFailure._(
+    return AuthFailure(
       message: message,
       code: AuthFailureCode.unauthorized,
     );
   }
 
   factory AuthFailure.serverError(String message) {
-    return const AuthFailure._(
+    return AuthFailure(
       message: message,
       code: AuthFailureCode.serverError,
     );
   }
 
   factory AuthFailure.networkError(String message) {
-    return const AuthFailure._(
+    return AuthFailure(
       message: message,
       code: AuthFailureCode.networkError,
     );
   }
 
   factory AuthFailure.tooManyRequests(String message) {
-    return const AuthFailure._(
+    return AuthFailure(
       message: message,
       code: AuthFailureCode.tooManyRequests,
     );
   }
 
   factory AuthFailure.validationError(String message) {
-    return const AuthFailure._(
+    return AuthFailure(
       message: message,
       code: AuthFailureCode.validationError,
     );
   }
 
   factory AuthFailure.conflict(String message) {
-    return const AuthFailure._(
+    return AuthFailure(
       message: message,
       code: AuthFailureCode.conflict,
     );
   }
 
   factory AuthFailure.notAuthenticated(String message) {
-    return const AuthFailure._(
+    return AuthFailure(
       message: message,
       code: AuthFailureCode.notAuthenticated,
     );

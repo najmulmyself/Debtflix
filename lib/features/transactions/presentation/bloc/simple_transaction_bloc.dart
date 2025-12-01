@@ -165,7 +165,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     } catch (e) {
       emit(state.copyWith(
         status: TransactionStatus.error,
-        failure: DatabaseFailure(e.toString()),
+        failure: Failure.unknown(e.toString()),
       ));
     }
   }
@@ -203,7 +203,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     } catch (e) {
       emit(state.copyWith(
         status: TransactionStatus.error,
-        failure: DatabaseFailure(e.toString()),
+        failure: Failure.unknown(e.toString()),
       ));
     }
   }
@@ -241,12 +241,12 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
 
       emit(state.copyWith(
         status: TransactionStatus.loaded,
-        transactions: updatedTransactions,
+        transactions: updatedTransactions.cast<Transaction>(),
       ));
     } catch (e) {
       emit(state.copyWith(
         status: TransactionStatus.error,
-        failure: DatabaseFailure(e.toString()),
+        failure: Failure.unknown(e.toString()),
       ));
     }
   }
@@ -274,7 +274,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     } catch (e) {
       emit(state.copyWith(
         status: TransactionStatus.error,
-        failure: DatabaseFailure(e.toString()),
+        failure: Failure.unknown(e.toString()),
       ));
     }
   }

@@ -87,10 +87,8 @@ class AppTheme {
       error: error,
       onError: textOnSurface,
       onBackground: textPrimary,
-      cardColor: cardBackground,
     ),
     textTheme: TextTheme(
-      color: textPrimary,
       bodyLarge: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w500,
@@ -237,7 +235,7 @@ class AppTheme {
         }
         return Colors.transparent;
       }),
-      checkColor: textOnSurface,
+      checkColor: WidgetStateProperty.all<Color>(textOnSurface),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
       ),
@@ -393,10 +391,8 @@ class AppTheme {
       error: error,
       onError: textOnSurface,
       onBackground: textPrimary,
-      cardColor: const Color(0xFF1E1E1E),
     ),
     textTheme: TextTheme(
-      color: textOnSurface,
       bodyLarge: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w500,
@@ -543,7 +539,7 @@ class AppTheme {
         }
         return Colors.transparent;
       }),
-      checkColor: textOnSurface,
+      checkColor: WidgetStateProperty.all<Color>(textOnSurface),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
       ),
