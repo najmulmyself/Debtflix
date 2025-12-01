@@ -16,7 +16,7 @@ class AuthInterceptor extends Interceptor {
       options.headers[ApiConstants.authorizationHeader] = 'Bearer $token';
     }
 
-    super.onRequest(options, handler);
+    handler.next(options);
   }
 
   @override
@@ -26,6 +26,6 @@ class AuthInterceptor extends Interceptor {
       _secureStorage.clearAll();
     }
 
-    super.onError(err, handler);
+    handler.next(err);
   }
 }
