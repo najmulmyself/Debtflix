@@ -8,7 +8,7 @@ class GetTopSpendingCategoriesUseCase {
 
   GetTopSpendingCategoriesUseCase(this.repository);
 
-  Future<Either<Failure, List<Map<String, dynamic>>>> call({
+  Future<Either<Failure, Map<String, double>>> call({
     DateTime? startDate,
     DateTime? endDate,
     int? limit,

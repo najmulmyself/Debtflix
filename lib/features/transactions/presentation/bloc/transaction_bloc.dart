@@ -6,8 +6,6 @@ import '../../domain/usecases/create_transaction_usecase.dart';
 import '../../../../core/errors/failures.dart';
 
 part 'transaction_bloc.freezed.dart';
-part 'transaction_event.dart';
-part 'transaction_state.dart';
 
 @freezed
 class TransactionEvent with _$TransactionEvent {
@@ -125,7 +123,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     } catch (e) {
       emit(state.copyWith(
         status: TransactionStatus.error,
-        failure: DatabaseFailure(e.toString()),
+        failure: Failure.databaseError(e.toString()),
       ));
     }
   }
@@ -165,7 +163,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     } catch (e) {
       emit(state.copyWith(
         status: TransactionStatus.error,
-        failure: DatabaseFailure(e.toString()),
+        failure: Failure.databaseError(e.toString()),
       ));
     }
   }
@@ -206,7 +204,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     } catch (e) {
       emit(state.copyWith(
         status: TransactionStatus.error,
-        failure: DatabaseFailure(e.toString()),
+        failure: Failure.databaseError(e.toString()),
       ));
     }
   }
@@ -236,7 +234,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     } catch (e) {
       emit(state.copyWith(
         status: TransactionStatus.error,
-        failure: DatabaseFailure(e.toString()),
+        failure: Failure.databaseError(e.toString()),
       ));
     }
   }

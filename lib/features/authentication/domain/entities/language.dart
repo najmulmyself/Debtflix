@@ -1,26 +1,23 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 enum Language {
-  @Freezed(equal: true)
-  const en = Language._('en', 'English');
-  const es = Language._('es', 'Spanish');
-  const fr = Language._('fr', 'French');
-  const de = Language._('de', 'German');
-  const it = Language._('it', 'Italian');
-  const pt = Language._('pt', 'Portuguese');
-  const ru = Language._('ru', 'Russian');
-  const ja = Language._('ja', 'Japanese');
-  const zh = Language._('zh', 'Chinese');
-  const ar = Language._('ar', 'Arabic');
-  const hi = Language._('hi', 'Hindi');
+  en('en', 'English'),
+  es('es', 'Spanish'),
+  fr('fr', 'French'),
+  de('de', 'German'),
+  it('it', 'Italian'),
+  pt('pt', 'Portuguese'),
+  ru('ru', 'Russian'),
+  ja('ja', 'Japanese'),
+  zh('zh', 'Chinese'),
+  ar('ar', 'Arabic'),
+  hi('hi', 'Hindi');
 
-  const Language._(this.code, this.name);
+  final String code;
+  final String name;
 
-  @override
-  String toString() {
-    return code;
-  }
+  const Language(this.code, this.name);
 
   @override
-  int get hashCode => Object.hash(code).hashCode;
+  String toString() => code;
 }

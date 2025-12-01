@@ -12,4 +12,3 @@ targets:
       drift_dev:
         options:
           generate_connect_constructor: true
-          sqlite: true

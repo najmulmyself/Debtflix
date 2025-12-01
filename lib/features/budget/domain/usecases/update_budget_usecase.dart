@@ -20,14 +20,14 @@ class UpdateBudgetUseCase {
     String? currency,
   }) async {
     // Validate inputs
-    if (name?.trim().isEmpty) {
-      return const Left(Failure.validationError('Budget name cannot be empty'));
+    if (name?.trim().isEmpty == true) {
+      return Left(Failure.validationError('Budget name cannot be empty'));
     }
     if (amount != null && amount <= 0) {
-      return const Left(Failure.validationError('Budget amount must be greater than 0'));
+      return Left(Failure.validationError('Budget amount must be greater than 0'));
     }
-    if (endDate.isBefore(startDate)) {
-      return const Left(Failure.validationError('End date must be after start date'));
+    if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
+      return Left(Failure.validationError('End date must be after start date'));
     }
 
     try {

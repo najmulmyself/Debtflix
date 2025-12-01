@@ -14,7 +14,7 @@ import 'tables/users_table.dart';
 part 'app_database.g.dart';
 
 @DriftDatabase(
-  include: [
+  tables: [
     TransactionsTable,
     CategoriesTable,
     AccountsTable,
@@ -26,13 +26,13 @@ part 'app_database.g.dart';
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
-  AppDatabase.forTesting(DynamicConnection connection) : super(connection);
+  AppDatabase.forTesting(QueryExecutor connection) : super(connection);
 
   static QueryExecutor _openConnection() {
     return LazyDatabase(() async {
       final dbFolder = await getApplicationDocumentsDirectory();
       final file = File(p.join(dbFolder.path, 'money_manager.sqlite'));
-      return NativeDatabase.createBackgroundConnection(file.path, logStatements: true);
+      return NativeDatabase.createInBackground(file, logStatements: true);
     });
   }
 

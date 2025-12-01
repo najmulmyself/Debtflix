@@ -1,12 +1,15 @@
 import 'package:drift/drift.dart';
 
+import 'categories_table.dart';
+import 'accounts_table.dart';
+
 @DataClassName('Transaction')
 class TransactionsTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get description => text()();
   RealColumn get amount => real()();
-  TextColumn get currency => text().withDefault(const Currency('USD'))();
-  TextColumn get type => text().withDefault(const TransactionType.expense))();
+  TextColumn get currency => text().withDefault(const Constant('USD'))();
+  TextColumn get type => text().withDefault(const Constant('expense'))();
   IntColumn get categoryId => integer().nullable().references(CategoriesTable, #id)();
   IntColumn get accountId => integer().nullable().references(AccountsTable, #id)();
   DateTimeColumn get date => dateTime()();

@@ -61,7 +61,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
         );
       }
     } catch (e) {
-      return Left(DatabaseFailure('Failed to get transactions: $e'));
+      return Left(Failure.databaseError('Failed to get transactions: $e'));
     }
   }
 
@@ -81,7 +81,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
         return await localDataSource.getTransactionById(id);
       }
     } catch (e) {
-      return Left(DatabaseFailure('Failed to get transaction: $e'));
+      return Left(Failure.databaseError('Failed to get transaction: $e'));
     }
   }
 
@@ -144,7 +144,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
         ));
       }
     } catch (e) {
-      return Left(DatabaseFailure('Failed to create transaction: $e'));
+      return Left(Failure.databaseError('Failed to create transaction: $e'));
     }
   }
 
@@ -210,7 +210,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
         ));
       }
     } catch (e) {
-      return Left(DatabaseFailure('Failed to update transaction: $e'));
+      return Left(Failure.databaseError('Failed to update transaction: $e'));
     }
   }
 
@@ -230,7 +230,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
         return await localDataSource.deleteTransaction(id);
       }
     } catch (e) {
-      return Left(DatabaseFailure('Failed to delete transaction: $e'));
+      return Left(Failure.databaseError('Failed to delete transaction: $e'));
     }
   }
 
@@ -249,7 +249,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
       return localResult;
     } catch (e) {
-      return Left(DatabaseFailure('Failed to get total balance: $e'));
+      return Left(Failure.databaseError('Failed to get total balance: $e'));
     }
   }
 
@@ -268,7 +268,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
       return localResult;
     } catch (e) {
-      return Left(DatabaseFailure('Failed to get income vs expense: $e'));
+      return Left(Failure.databaseError('Failed to get income vs expense: $e'));
     }
   }
 
@@ -289,7 +289,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
       return localResult;
     } catch (e) {
-      return Left(DatabaseFailure('Failed to get spending by category: $e'));
+      return Left(Failure.databaseError('Failed to get spending by category: $e'));
     }
   }
 }

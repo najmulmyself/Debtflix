@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:either_dart/either.dart';
 
 import '../entities/user.dart';
 import '../repositories/auth_repository.dart';
@@ -11,7 +11,7 @@ class LoginUseCase {
 
   Future<Either<AuthFailure, User>> call(String email, String password) async {
     try {
-      return await _repository.login(email, password);
+      return _repository.login(email, password);
     } catch (e) {
       return Left(AuthFailure.networkError(e.toString()));
     }

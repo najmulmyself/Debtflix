@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
+import 'package:injectable/injectable.dart';
 
-import '../../core/network/network_info.dart';
-import '../../core/storage/secure_storage.dart';
-import '../../core/errors/failures.dart';
+import '../../../../core/network/network_info.dart';
+import '../../../../core/storage/secure_storage.dart';
+import '../../../../core/errors/failures.dart';
+import '../../../../core/types/unit.dart';
 import '../entities/user.dart';
-import '../../../app/constants/api_constants.dart';
+import 'auth_repository.dart';
 
 @injectable
 class AuthRepositoryImpl implements AuthRepository {
@@ -18,69 +20,69 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, User>> login(String email, String password) async {
     if (!await _networkInfo.isConnected) {
-      return const Left(AuthFailure.networkError('No internet connection'));
+      return Left(Failure.networkError('No internet connection'));
     }
 
     try {
       final response = await _dio.post(
-        ApiConstants.login,
+        '/auth/login',
         data: {
           'email': email,
           'password': password,
         },
         options: Options(
-          headers: {ApiConstants.contentTypeHeader: ApiConstants.jsonContentType},
+          headers: {"Content-Type": "application/json"},
         ),
       );
 
       if (response.statusCode == 200 && response.data != null) {
-        final user = User.fromJson(response.data);
+        final user = User.fromJson(response.data as Map<String, dynamic>);
         await _secureStorage.saveToken(user.id.toString());
         return Right(user);
       } else if (response.statusCode == 401) {
-        return const Left(AuthFailure.unauthorized('Invalid credentials'));
+        return Left(Failure.unauthorized('Invalid credentials'));
       } else if (response.statusCode == 429) {
-        return const Left(AuthFailure.tooManyRequests('Too many requests'));
+        return Left(Failure.tooManyRequests('Too many requests'));
       } else {
-        return const Left(AuthFailure.serverError('Server error'));
+        return Left(Failure.serverError('Server error'));
       }
     } catch (e) {
-      return const Left(AuthFailure.networkError(e.toString()));
+      return Left(Failure.networkError(e.toString()));
     }
   }
 
   @override
   Future<Either<Failure, User>> register(String email, String password, String name) async {
     if (!await _networkInfo.isConnected) {
-      return const Left(AuthFailure.networkError('No internet connection'));
+      return Left(Failure.networkError('No internet connection'));
     }
 
     try {
       final response = await _dio.post(
-        ApiConstants.register,
+        '/auth/register',
         data: {
           'email': email,
           'password': password,
           'name': name,
         },
         options: Options(
-          headers: {ApiConstants.contentTypeHeader: ApiConstants.jsonContentType},
+          headers: {"Content-Type": "application/json"},
         ),
       );
 
       if (response.statusCode == 201 && response.data != null) {
-        final user = User.fromJson(response.data);
+        final user = User.fromJson(response.data as Map<String, dynamic>);
         await _secureStorage.saveToken(user.id.toString());
         return Right(user);
       } else if (response.statusCode == 409) {
-        return const Left(AuthFailure.conflict('Email already exists'));
+        return Left(Failure.conflict('Email already exists'));
       } else if (response.statusCode == 422) {
-        return const Left(AuthFailure.validationError('Invalid data'));
+        return Left(Failure.validationError('Invalid data'));
       } else {
-        return const Left(AuthFailure.serverError('Registration failed'));
+        return Left(Failure.serverError('Registration failed'));
       }
     } catch (e) {
-      return const Left(AuthFailure.networkError(e.toString()));
+      return Left(Failure.networkError(e.toString()));
     }
   }
 
@@ -92,10 +94,10 @@ class AuthRepositoryImpl implements AuthRepository {
         await _secureStorage.removeToken();
         return const Right(unit);
       } else {
-        return const Left(AuthFailure.notAuthenticated('No token found'));
+        return Left(Failure.notAuthenticated('No token found'));
       }
     } catch (e) {
-      return const Left(AuthFailure.networkError(e.toString()));
+      return Left(Failure.networkError(e.toString()));
     }
   }
 
@@ -104,7 +106,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final token = await _secureStorage.getToken();
       if (token == null) {
-        return const Left(AuthFailure.notAuthenticated('No token found'));
+        return Left(Failure.notAuthenticated('No token found'));
       }
 
       final response = await _dio.post(
@@ -113,7 +115,7 @@ class AuthRepositoryImpl implements AuthRepository {
           'refresh_token': token,
         },
         options: Options(
-          headers: {ApiConstants.contentTypeHeader: ApiConstants.jsonContentType},
+          headers: {"Content-Type": "application/json"},
         ),
       );
 
@@ -122,10 +124,10 @@ class AuthRepositoryImpl implements AuthRepository {
         await _secureStorage.saveToken(newToken);
         return Right(newToken);
       } else {
-        return const Left(AuthFailure.serverError('Token refresh failed'));
+        return Left(Failure.serverError('Token refresh failed'));
       }
     } catch (e) {
-      return const Left(AuthFailure.networkError(e.toString()));
+      return Left(Failure.networkError(e.toString()));
     }
   }
 
@@ -134,13 +136,13 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final token = await _secureStorage.getToken();
       if (token == null) {
-        return const Left(AuthFailure.notAuthenticated('No token found'));
+        return Left(Failure.notAuthenticated('No token found'));
       }
 
       // In a real app, this would make an API call
       return const Right(false);
     } catch (e) {
-      return const Left(AuthFailure.networkError(e.toString()));
+      return Left(Failure.networkError(e.toString()));
     }
   }
 
@@ -149,7 +151,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final token = await _secureStorage.getToken();
       if (token == null) {
-        return const Left(AuthFailure.notAuthenticated('No token found'));
+        return Left(Failure.notAuthenticated('No token found'));
       }
 
       final response = await _dio.put(
@@ -170,13 +172,13 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       if (response.statusCode == 200) {
-        final updatedUser = User.fromJson(response.data);
+        final updatedUser = User.fromJson(response.data as Map<String, dynamic>);
         return Right(updatedUser);
       } else {
-        return const Left(AuthFailure.serverError('Profile update failed'));
+        return Left(Failure.serverError('Profile update failed'));
       }
     } catch (e) {
-      return const Left(AuthFailure.networkError(e.toString()));
+      return Left(Failure.networkError(e.toString()));
     }
   }
 }

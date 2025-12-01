@@ -1,26 +1,23 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 enum Timezone {
-  @Freezed(equal: true)
-  const UTC = Timezone._('UTC', 'Coordinated Universal Time');
-  const EST = Timezone._('EST', 'Eastern Standard Time');
-  const PST = Timezone._('PST', 'Pacific Standard Time');
-  const MST = Timezone._('MST', 'Central Standard Time');
-  const CST = Timezone._('CST', 'Central Standard Time');
-  const IST = Timezone._('IST', 'India Standard Time');
-  const GMT = Timezone._('GMT', 'Greenwich Mean Time');
-  const CET = Timezone._('CET', 'Central European Time');
-  const EET = Timezone._('EET', 'Eastern European Time');
-  const JST = Timezone._('JST', 'Japan Standard Time');
-  const AEST = Timezone._('AEST', 'Australian Eastern Standard Time');
+  UTC('UTC', 'Coordinated Universal Time'),
+  EST('EST', 'Eastern Standard Time'),
+  PST('PST', 'Pacific Standard Time'),
+  MST('MST', 'Central Standard Time'),
+  CST('CST', 'Central Standard Time'),
+  IST('IST', 'India Standard Time'),
+  GMT('GMT', 'Greenwich Mean Time'),
+  CET('CET', 'Central European Time'),
+  EET('EET', 'Eastern European Time'),
+  JST('JST', 'Japan Standard Time'),
+  AEST('AEST', 'Australian Eastern Standard Time');
 
-  const Timezone._(this.code, this.name);
+  final String code;
+  final String name;
 
-  @override
-  String toString() {
-    return '$code ($name)';
-  }
+  const Timezone(this.code, this.name);
 
   @override
-  int get hashCode => code.hashCode;
+  String toString() => '$code ($name)';
 }

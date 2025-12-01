@@ -56,29 +56,7 @@ class BudgetState with _$BudgetState {
     Budget? selectedBudget,
   }) = _BudgetState;
 
-  const factory BudgetState.initial() = _BudgetState;
 
-  const factory BudgetState.loading() = _BudgetState.copyWith(
-        isLoading: true,
-        failure: null,
-      );
-
-  const factory BudgetState.loaded({
-    required List<Budget> budgets,
-    bool hasReachedMax = false,
-    int currentPage = 0,
-    int limit = 20,
-  }) = _BudgetState;
-
-  const factory BudgetState.error(Failure failure) = _BudgetState.copyWith(
-        isLoading: false,
-        failure: failure,
-      );
-
-  const factory BudgetState.action({
-    required BudgetState state,
-    Budget? selectedBudget,
-  }) = _BudgetState;
 }
 
 class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
@@ -92,29 +70,51 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
     required this._getBudgetsUseCase,
     required this._updateBudgetUseCase,
     required this._deleteBudgetUseCase,
-  }) : super(const BudgetState.initial()) {
+  }) : super(const BudgetState()) {
     on<BudgetEvent>((event, emit) {
-      switch (event) {
-        case BudgetEvent.loadBudgets():
-          return _mapLoadBudgetsToState(event, emit);
-
-        case BudgetEvent.createBudget():
-          return _mapCreateBudgetToState(event, emit);
-
-        case BudgetEvent.updateBudget():
-          return _mapUpdateBudgetToState(event, emit);
-
-        case BudgetEvent.deleteBudget():
-          return _mapDeleteBudgetToState(event, emit);
-
-        case BudgetEvent.clearError():
-          return _mapClearErrorToState(emit);
-      }
-    }
+      return event.when(
+        loadBudgets: (categoryId, startDate, endDate) => _mapLoadBudgetsToState(
+          _LoadBudgets(categoryId: categoryId, startDate: startDate, endDate: endDate),
+          emit,
+        ),
+        createBudget: (name, amount, startDate, endDate, categoryId, notes, currency) =>
+          _mapCreateBudgetToState(
+            _CreateBudget(
+              name: name,
+              amount: amount,
+              startDate: startDate,
+              endDate: endDate,
+              categoryId: categoryId,
+              notes: notes,
+              currency: currency,
+            ),
+            emit,
+          ),
+        updateBudget: (id, name, amount, startDate, endDate, categoryId, notes, currency) =>
+          _mapUpdateBudgetToState(
+            _UpdateBudget(
+              id: id,
+              name: name,
+              amount: amount,
+              startDate: startDate,
+              endDate: endDate,
+              categoryId: categoryId,
+              notes: notes,
+              currency: currency,
+            ),
+            emit,
+          ),
+        deleteBudget: (id) => _mapDeleteBudgetToState(
+          _DeleteBudget(id),
+          emit,
+        ),
+        clearError: () => _mapClearErrorToState(emit),
+      );
+    });
   }
 
   Future<void> _mapLoadBudgetsToState(
-    BudgetEvent event,
+    _LoadBudgets event,
     Emitter<BudgetState> emit,
   ) async {
     emit(state.copyWith(isLoading: true, failure: null));
@@ -148,7 +148,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   }
 
   Future<void> _mapCreateBudgetToState(
-    BudgetEvent event,
+    _CreateBudget event,
     Emitter<BudgetState> emit,
   ) async {
     emit(state.copyWith(isLoading: true, failure: null));
@@ -183,7 +183,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   }
 
   Future<void> _mapUpdateBudgetToState(
-    BudgetEvent event,
+    _UpdateBudget event,
     Emitter<BudgetState> emit,
   ) async {
     emit(state.copyWith(isLoading: true, failure: null));
@@ -205,9 +205,9 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
           isLoading: false,
           failure: failure,
         )),
-        (budget) {
+        (updatedBudget) {
           final updatedBudgets = state.budgets.map((budget) {
-            return budget.id == event.id ? result : budget;
+            return budget.id == event.id ? updatedBudget : budget;
           }).toList();
 
           emit(state.copyWith(
@@ -225,7 +225,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   }
 
   Future<void> _mapDeleteBudgetToState(
-    BudgetEvent event,
+    _DeleteBudget event,
     Emitter<BudgetState> emit,
   ) async {
     emit(state.copyWith(isLoading: true, failure: null));
@@ -251,7 +251,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
     }
   }
 
-  Future<void> _mapClearErrorToState(Emitter<BudgetState> emit) {
+  Future<void> _mapClearErrorToState(Emitter<BudgetState> emit) async {
     emit(state.copyWith(
       isLoading: false,
       failure: null,

@@ -63,7 +63,7 @@ class BudgetListPage extends StatelessWidget {
       ),
       body: BlocBuilder<BudgetBloc, BudgetState>(
         builder: (context, state) {
-          if (state.status == BudgetStatus.loading) {
+          if (state.isLoading) {
             return const LoadingWidget();
           }
 
@@ -94,6 +94,7 @@ class BudgetListPage extends StatelessWidget {
                       color: Colors.grey[600],
                       fontWeight: FontWeight.w500,
                     ),
+                  ),
                   const SizedBox(height: 8),
                   const Text(
                     'Create your first budget to get started',
@@ -145,6 +146,7 @@ class BudgetListPage extends StatelessWidget {
             ),
           );
         },
+      ),
       floatingActionButton: const AddBudgetFab(),
     );
   }

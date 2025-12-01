@@ -5,17 +5,19 @@ part 'expense_summary.g.dart';
 
 @freezed
 class ExpenseSummary with _$ExpenseSummary {
-  const ExpenseSummary._({
-    required this.id,
-    required this.totalAmount,
-    required this.transactionCount,
-    required this.categoryId,
-    this.categoryName,
-    required this.categoryIcon,
-    required this.categoryColor,
-    required this.date,
-    required this.currency,
-  });
+  const ExpenseSummary._();
+
+  const factory ExpenseSummary({
+    required int id,
+    required double totalAmount,
+    required int transactionCount,
+    required int categoryId,
+    String? categoryName,
+    required String categoryIcon,
+    required String categoryColor,
+    required DateTime date,
+    required String currency,
+  }) = _ExpenseSummary;
 
   factory ExpenseSummary.fromJson(Map<String, dynamic> json) => _$ExpenseSummaryFromJson(json);
 

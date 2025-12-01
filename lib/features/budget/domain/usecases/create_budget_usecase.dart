@@ -20,13 +20,13 @@ class CreateBudgetUseCase {
   }) async {
     // Validate inputs
     if (name.trim().isEmpty) {
-      return const Left(Failure.validationError('Budget name cannot be empty'));
+      return Left(Failure.validationError('Budget name cannot be empty'));
     }
     if (amount <= 0) {
-      return const Left(Failure.validationError('Budget amount must be greater than 0'));
+      return Left(Failure.validationError('Budget amount must be greater than 0'));
     }
     if (endDate.isBefore(startDate)) {
-      return const Left(Failure.validationError('End date must be after start date'));
+      return Left(Failure.validationError('End date must be after start date'));
     }
 
     final budget = Budget(
@@ -54,7 +54,7 @@ class CreateBudgetUseCase {
         currency: budget.currency,
       );
 
-      return Right(result);
+      return result;
     } catch (e) {
       return Left(Failure.databaseError('Failed to create budget: $e'));
     }

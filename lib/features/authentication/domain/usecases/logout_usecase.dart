@@ -1,25 +1,19 @@
-import 'package:dartz/dartz.dart';
+import 'package:either_dart/either.dart';
 
-import '../entities/user.dart';
 import '../repositories/auth_repository.dart';
-import '../failures/auth_failure.dart';
+import '../../../../core/errors/failures.dart';
+import '../../../../core/types/unit.dart';
 
 class LogoutUseCase {
   final AuthRepository _repository;
 
   LogoutUseCase(this._repository);
 
-  Future<Either<AuthFailure, Unit>> call() async {
+  Future<Either<Failure, Unit>> call() async {
     try {
-      final token = await _secureStorage.getToken();
-      if (token == null) {
-        return const Left(AuthFailure.notAuthenticated('No token found'));
-      }
-
-      final result = await _repository.logout();
-      return result;
+      return await _repository.logout();
     } catch (e) {
-      return const Left(AuthFailure.networkError(e.toString()));
+      return Left(Failure.networkError(e.toString()));
     }
   }
 }

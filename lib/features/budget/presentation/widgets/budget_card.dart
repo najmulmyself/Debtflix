@@ -4,7 +4,7 @@ import '../../domain/entities/budget.dart';
 import '../../../../app/theme/app_colors.dart';
 
 class BudgetCard extends StatelessWidget {
-  final dynamic budget;
+  final Budget budget;
   final VoidCallback? onTap;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
@@ -73,7 +73,6 @@ class BudgetCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                  ],
                   Text(
                     '${isOverBudget ? '\$${budget.spent.toStringAsFixed(2)}' : '\$${budget.amount.toStringAsFixed(2)}'}',
                     style: TextStyle(
@@ -82,16 +81,16 @@ class BudgetCard extends StatelessWidget {
                       color: isOverBudget ? Colors.red : Colors.blue,
                     ),
                   ),
-                ],
+                  ],
+                ),
               const SizedBox(height: 12),
               Text(
                 budget.progressText,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+              ),
               const SizedBox(height: 8),
               Row(
                 children: [
@@ -118,7 +117,7 @@ class BudgetCard extends StatelessWidget {
                       ),
                     ),
                 ],
-              ],
+              ),
             ],
           ),
         ),

@@ -9,12 +9,14 @@ class GetSpendingOverTimeUseCase {
 
   GetSpendingOverTimeUseCase(this.repository);
 
-  Future<Either<Failure, List<String>>> call({
-    String? categoryId,
+  Future<Either<Failure, List<ExpenseSummary>>> call({
+    DateTime? startDate,
+    DateTime? endDate,
   }) async {
     try {
       final result = await repository.getSpendingOverTime(
-        categoryId: categoryId,
+        startDate: startDate,
+        endDate: endDate,
       );
 
       return result;

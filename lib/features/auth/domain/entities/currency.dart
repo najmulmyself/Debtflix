@@ -1,33 +1,31 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 enum Currency {
-  @Freezed(equal: true)
-  const USD = Currency._('USD', 'US Dollar', '\$');
-  const EUR = Currency._('EUR', 'Euro', '€');
-  const GBP = Currency._('GBP', 'British Pound', '£');
-  const JPY = Currency._('JPY', 'Japanese Yen', '¥');
-  const CAD = Currency._('CAD', 'Canadian Dollar', 'C$');
-  const AUD = Currency._('AUD', 'Australian Dollar', 'A$');
-  const CHF = Currency._('CHF', 'Swiss Franc', 'CHF');
-  const CNY = Currency._('CNY', 'Chinese Yuan', '¥');
-  const INR = Currency._('INR', 'Indian Rupee', '₹');
-  const BRL = Currency._('BRL', 'Brazilian Real', 'R$');
-  const RUB = Currency._('RUB', 'Russian Ruble', '₽');
-  const MXN = Currency._('MXN', 'Mexican Peso', 'MX$');
-  const SGD = Currency._('SGD', 'Singapore Dollar', 'S$');
-  const HKD = Currency._('HKD', 'Hong Kong Dollar', 'HK$');
-  const NZD = Currency._('NZD', 'New Zealand Dollar', 'NZ$');
-  const ZAR = Currency._('ZAR', 'South African Rand', 'R');
-  const TRY = Currency._('TRY', 'Turkish Lira', '₺');
-  const KRW = Currency._('KRW', 'South Korean Won', '₩');
+  USD('USD', 'US Dollar', '\$'),
+  EUR('EUR', 'Euro', '€'),
+  GBP('GBP', 'British Pound', '£'),
+  JPY('JPY', 'Japanese Yen', '¥'),
+  CAD('CAD', 'Canadian Dollar', 'C\$'),
+  AUD('AUD', 'Australian Dollar', 'A\$'),
+  CHF('CHF', 'Swiss Franc', 'CHF'),
+  CNY('CNY', 'Chinese Yuan', '¥'),
+  INR('INR', 'Indian Rupee', '₹'),
+  BRL('BRL', 'Brazilian Real', 'R\$'),
+  RUB('RUB', 'Russian Ruble', '₽'),
+  MXN('MXN', 'Mexican Peso', 'MX\$'),
+  SGD('SGD', 'Singapore Dollar', 'S\$'),
+  HKD('HKD', 'Hong Kong Dollar', 'HK\$'),
+  NZD('NZD', 'New Zealand Dollar', 'NZ\$'),
+  ZAR('ZAR', 'South African Rand', 'R'),
+  TRY('TRY', 'Turkish Lira', '₺'),
+  KRW('KRW', 'South Korean Won', '₩');
 
-  const Currency._(this.code, this.symbol, this.name);
+  final String code;
+  final String name;
+  final String symbol;
 
-  @override
-  String toString() {
-    return '$symbol ($name)';
-  }
+  const Currency(this.code, this.name, this.symbol);
 
   @override
-  int get hashCode => code.hashCode;
+  String toString() => '$symbol ($name)';
 }

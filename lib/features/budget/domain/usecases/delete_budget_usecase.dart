@@ -8,7 +8,7 @@ class DeleteBudgetUseCase {
 
   DeleteBudgetUseCase(this.repository);
 
-  Future<Either<Failure, bool>> call({required int id}) async {
+  Future<Either<Failure, void>> call({required int id}) async {
     try {
       final result = await repository.deleteBudget(id);
       return result;

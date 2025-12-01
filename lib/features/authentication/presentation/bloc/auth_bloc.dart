@@ -1,77 +1,82 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../domain/entities/user.dart';
-import '../../domain/usecases/login_usecase.dart';
-import '../../domain/usecases/logout_usecase.dart';
+import '../../../auth/domain/entities/user.dart';
+import '../../../auth/domain/usecases/login_usecase.dart';
+import '../../../auth/domain/usecases/logout_usecase.dart';
+import '../../../auth/domain/failures/auth_failure.dart';
+import '../../../../core/errors/failures.dart';
 
 part 'auth_bloc.freezed.dart';
+
+@freezed
+class AuthEvent with _$AuthEvent {
+  const factory AuthEvent.login({
+    required String email,
+    required String password,
+    String? name,
+  }) = _Login;
+  const factory AuthEvent.logout() = _Logout;
+}
+
+@freezed
+class AuthState with _$AuthState {
+  const factory AuthState.initial() = _Initial;
+  const factory AuthState.loading() = _Loading;
+  const factory AuthState.authenticated(User user) = _Authenticated;
+  const factory AuthState.unauthenticated() = _Unauthenticated;
+  const factory AuthState.error({required Failure failure}) = _Error;
+}
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase _loginUseCase;
   final LogoutUseCase _logoutUseCase;
 
   AuthBloc({
-    required this._loginUseCase,
-    required this._logoutUseCase,
-  }) : super(const AuthState.initial()) {
-    on<AuthEvent>((event, emit) {
+    required LoginUseCase loginUseCase,
+    required LogoutUseCase logoutUseCase,
+  })  : _loginUseCase = loginUseCase,
+        _logoutUseCase = logoutUseCase,
+        super(const AuthState.initial()) {
+    on<AuthEvent>((event, emit) async {
       switch (event) {
-        case AuthEvent.login((email, password, name)):
-          emit(state.copyWith(status: AuthStatus.loading));
+        case _Login(:final email, :final password, :final name):
+          emit(const AuthState.loading());
 
           try {
             final result = await _loginUseCase(email, password);
-            emit(state.copyWith(
-              status: result.fold(
-                (user) => AuthState.authenticated(user),
-                (failure) => AuthState.error(failure: failure),
-              ),
-            ));
+            result.fold(
+              (failure) {
+                final convertedFailure = Failure.databaseError(failure.message);
+                emit(AuthState.error(failure: convertedFailure));
+              },
+              (user) => emit(AuthState.authenticated(user)),
+            );
           } catch (e) {
-            emit(state.copyWith(
-              status: AuthState.error(failure: e.toString()),
-            ));
+            emit(AuthState.error(failure: Failure.serverError(e.toString())));
           }
-          break;
 
-        case AuthEvent.logout():
+        case _Logout():
           try {
             final result = await _logoutUseCase();
-            emit(state.copyWith(
-              status: result.fold(
-                (user) => AuthState.unauthenticated,
-                (failure) => AuthState.error(failure: failure),
-              ),
-            ));
+            result.fold(
+              (failure) {
+                final convertedFailure = Failure.databaseError(failure.message);
+                emit(AuthState.error(failure: convertedFailure));
+              },
+              (_) => emit(const AuthState.unauthenticated()),
+            );
           } catch (e) {
-            emit(state.copyWith(
-              status: AuthState.error(failure: e.toString()),
-            ));
+            emit(AuthState.error(failure: Failure.serverError(e.toString())));
           }
-          break;
 
         default:
           emit(const AuthState.unauthenticated());
       }
-    }
+    });
   }
+
 
   @override
-  Stream<AuthState> map(AuthEvent event, AuthState emit)>
-    (event, emit) => state.map((event) {
-      switch (event) {
-        case AuthEvent.login((email, password, name)):
-          return _mapLoginEventToState(event, state, emit);
-
-        case AuthEvent.logout():
-          return _mapLogoutEventToState(event, state, emit);
-
-        default:
-          return const AuthState.unauthenticated();
-      }
-    }
-  }
-
   String toString() => 'AuthBloc';
 }

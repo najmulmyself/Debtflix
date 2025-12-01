@@ -10,12 +10,12 @@ class GetMonthlyReportUseCase {
 
   Future<Either<Failure, Map<String, dynamic>>> call({
     DateTime? month,
-    String? currency,
   }) async {
     try {
+      final now = month ?? DateTime.now();
       final result = await repository.getMonthlyReport(
-        month: month,
-        currency: currency,
+        year: now.year,
+        month: now.month,
       );
 
       return result;

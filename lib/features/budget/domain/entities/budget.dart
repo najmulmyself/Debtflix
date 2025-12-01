@@ -5,19 +5,21 @@ part 'budget.g.dart';
 
 @freezed
 class Budget with _$Budget {
-  const Budget({
-    required this.id,
-    required this.name,
-    required this.amount,
-    required this.spent,
-    required this.currency,
-    required this.startDate,
-    required this.endDate,
-    this.categoryId,
-    this.notes,
-    @JsonKey(name: 'created_at') required this.createdAt,
-    @JsonKey(name: 'updated_at') required this.updatedAt,
-  });
+  const factory Budget({
+    required int id,
+    required String name,
+    required double amount,
+    required double spent,
+    required String currency,
+    required DateTime startDate,
+    required DateTime endDate,
+    String? categoryId,
+    String? notes,
+    @JsonKey(name: 'created_at') required DateTime createdAt,
+    @JsonKey(name: 'updated_at') required DateTime updatedAt,
+  }) = _Budget;
+  
+  const Budget._();
 
   factory Budget.fromJson(Map<String, dynamic> json) => _$BudgetFromJson(json);
 
